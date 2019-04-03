@@ -20,23 +20,25 @@ class NeuralNet():
         self.loss_hist = []
 
     def Forward(self, data):
-        print(self.weights[0])
+        # print(self.weights[0])
+        # print("data:", data)
+        # print("weights:", self.weights[0], self.weights[0].shape)
         result = np.dot(self.weights[0], data)
+        return result
 
     def fit(self, X_train, y_train):
         z = self.Forward(X_train)
-        print(z)
+        # print("printing", z)
         a = self.activation(z)
         loss = self.loss(a, y_train)
-        grad = 2*(act - y_train)*sigmoid_der(z)*a
+        grad = 2*(a - y_train)*sigmoid_der(z)*a
         self.weights -= grad
-
+        self.loss_hist.append(loss)
 
     def updateWeights(self):
         pass
 
-
-np.dot(nn.weights[0], X_train)
+# %% You know nothing
 
 nn = NeuralNet()
 
@@ -46,7 +48,11 @@ y_train = np.sin(X_train)
 
 nn.fit(X_train, y_train)
 
+nn.weights
 
+# %%
+nn.weights[0].shape
+np.dot(nn.weights[0], X_train)
 weights = np.zeros(neurons)
 
 np.tanh(4 * weights)
