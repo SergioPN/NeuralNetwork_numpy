@@ -24,13 +24,16 @@ class NeuralNet():
         result = np.dot(self.weights[0], data)
 
     def fit(self, X_train, y_train):
-
         z = self.Forward(X_train)
         print(z)
         a = self.activation(z)
         loss = self.loss(a, y_train)
         grad = 2*(act - y_train)*sigmoid_der(z)*a
         self.weights -= grad
+
+
+    def updateWeights(self):
+        pass
 
 
 np.dot(nn.weights[0], X_train)
