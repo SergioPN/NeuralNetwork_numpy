@@ -1,4 +1,6 @@
 import numpy as np
+import pandas as pd
+%matplotlib inline
 
 def sigmoid(x):
     return 1/(1+np.exp(-x))
@@ -10,11 +12,17 @@ def loss(x,y):
     return (x-y)**2
 
 
+
 class NeuralNet():
-    def __init__(self, input = 1, neurons = 10):
+    def __init__(self, input = 1, neurons = 10, weights = False):
         self.input = 1
         self.neurons = 10
-        self.weights = [np.zeros(neurons)]
+        if not weights:
+            print("Random weights")
+            self.weights = [np.random.random(size = neurons)*2]
+            print(self.weights)
+        else:
+            self.weights = weights
         self.activation = sigmoid
         self.loss = loss
         self.loss_hist = []
@@ -31,28 +39,35 @@ class NeuralNet():
         # print("printing", z)
         a = self.activation(z)
         loss = self.loss(a, y_train)
+        # print(f"Loss:{sum(loss)}")
         grad = 2*(a - y_train)*sigmoid_der(z)*a
-        self.weights -= grad
-        self.loss_hist.append(loss)
+        self.weights -= grad * 0.01
+        self.loss_hist.append(np.sum(loss))
 
     def updateWeights(self):
         pass
 
 # %% You know nothing
 
-nn = NeuralNet()
-
-X_train = np.random.random()*20
-y_train = np.sin(X_train)
+nn = NeuralNet(neurons = 50)
 
 
-nn.fit(X_train, y_train)
 
-nn.weights
+#%%
 
-# %%
-nn.weights[0].shape
-np.dot(nn.weights[0], X_train)
-weights = np.zeros(neurons)
+for i in range(100000):
+    X_train = np.random.random()*20
+    y_train = np.sin(X_train)
+    nn.fit(X_train, y_train)
 
-np.tanh(4 * weights)
+print(nn.weights)
+
+pd.Series(nn.loss_hist).ewm(alpha = 0.01).mean().plot()
+
+
+#%%
+
+X_test = np.linspace(0,2*np.pi, 100)
+y_test = np.sin(X_test)
+
+np.dot(nn.weights)
