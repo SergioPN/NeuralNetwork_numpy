@@ -19,7 +19,8 @@ class NeuralNet():
         self.neurons = 10
         if not weights:
             print("Random weights")
-            self.weights = [np.random.random(size = neurons)*2]
+            self.weights = [np.random.random(size = neurons)*2,
+                            np.random.random(size = input)*2]
             print(self.weights)
         else:
             self.weights = weights
@@ -31,7 +32,7 @@ class NeuralNet():
         # print(self.weights[0])
         # print("data:", data)
         # print("weights:", self.weights[0], self.weights[0].shape)
-        result = np.dot(self.weights[0], data)
+        result = np.dot(self.weights[1], data)
         return result
 
     def fit(self, X_train, y_train):
