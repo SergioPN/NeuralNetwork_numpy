@@ -12,7 +12,6 @@ def loss(x,y):
     return (x-y)**2
 
 
-
 class NeuralNet():
     def __init__(self, input = 1, neurons = 10, output = 1, weights = False):
         self.input = 1
