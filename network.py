@@ -14,13 +14,13 @@ def loss(x,y):
 
 
 class NeuralNet():
-    def __init__(self, input = 1, neurons = 10, weights = False):
+    def __init__(self, input = 1, neurons = 10, output = 1, weights = False):
         self.input = 1
         self.neurons = 10
         if not weights:
             print("Random weights")
-            self.weights = [np.random.random(size = neurons)*2,
-                            np.random.random(size = input)*2]
+            self.weights = [np.random.random(size = (neurons, input))*2,
+                            np.random.random(size = (output, neurons))*2]
             print(self.weights)
         else:
             self.weights = weights
@@ -32,15 +32,14 @@ class NeuralNet():
         # print(self.weights[0])
         # print("data:", data)
         # print("weights:", self.weights[0], self.weights[0].shape)
-        result = np.dot(self.weights[1], data)
+        temp = self.activation(np.dot(self.weights[0], data))
+        result = self.activation(np.dot(self.weights[1], temp))
         return result
 
     def fit(self, X_train, y_train):
-        z = self.Forward(X_train)
-        # print("printing", z)
-        a = self.activation(z)
-        loss = self.loss(a, y_train)
-        # print(f"Loss:{sum(loss)}")
+        y_hat = self.Forward(X_train)
+        loss = self.loss(y_hat, y_train)
+        print(f"Loss:{sum(loss)}")
         grad = 2*(a - y_train)*sigmoid_der(z)*a
         self.weights -= grad * 0.01
         self.loss_hist.append(np.sum(loss))
